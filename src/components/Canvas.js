@@ -10,13 +10,17 @@ const Canvas = (props) => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        const image = imageRef.current;
-
         const ctx = canvas.getContext('2d');
       
-            ctx.drawImage(image, 0, 0, image.width, image.height);
-    
+       
 
+        const image = new Image();
+        image.src = pokemon_search;
+        image.onload = function () {
+            ctx.drawImage(image, 0, 0);
+        };
+
+  
      
     //Our first draw
 
@@ -39,8 +43,8 @@ const Canvas = (props) => {
     return (
         
         <div>
-            <canvas ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => drawTargetingBox(e)} />
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search}/>
+            <canvas ref={canvasRef} width="1440" height="900" {...props} onClick={(e)=>drawTargetingBox(e)}/>
         </div>
        
     );
