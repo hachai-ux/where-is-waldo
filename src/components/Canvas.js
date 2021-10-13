@@ -28,6 +28,7 @@ const Canvas = (props) => {
     
     const drawTargetingBox = (e) => {
         const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
         console.log(canvasRef);
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -35,6 +36,13 @@ const Canvas = (props) => {
  
         console.log(x);
         console.log(y);
+
+        const rectSize = 50;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.rect(x-(rectSize/2), y-(rectSize/2), rectSize, rectSize);
+        ctx.stroke();
         
         
     }
