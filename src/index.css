@@ -5,3 +5,7 @@
 .search-image {
   display: none;
 }
+
+canvas#search-image {
+  background-image: url("./images/Pokemon_Search.png");
+}

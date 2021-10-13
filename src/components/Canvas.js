@@ -7,7 +7,7 @@ const Canvas = (props) => {
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     
-
+/* --obsolete, because of using background-image in css--
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -25,6 +25,7 @@ const Canvas = (props) => {
     //Our first draw
 
     }, [])
+    */
     
     const drawTargetingBox = (e) => {
         const canvas = canvasRef.current;
@@ -41,7 +42,11 @@ const Canvas = (props) => {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
-        ctx.rect(x-(rectSize/2), y-(rectSize/2), rectSize, rectSize);
+        ctx.rect(x - (rectSize / 2), y - (rectSize / 2), rectSize, rectSize);
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        //transparent probably due to pixel density
+        ctx.stroke();
+        ctx.stroke();
         ctx.stroke();
         
         
@@ -52,7 +57,7 @@ const Canvas = (props) => {
         
         <div>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search}/>
-            <canvas ref={canvasRef} width="1440" height="900" {...props} onClick={(e)=>drawTargetingBox(e)}/>
+            <canvas id='search-image'ref={canvasRef} width="1440" height="900" {...props} onClick={(e)=>drawTargetingBox(e)}/>
         </div>
        
     );
