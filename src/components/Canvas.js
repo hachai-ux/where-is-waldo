@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { collection, doc, DocumentSnapshot, getDoc } from "firebase/firestore";
 import pokemon_search from '../images/Pokemon_Search.png';
 
 
@@ -7,6 +8,10 @@ const Canvas = (props) => {
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const [dropdownProperties, setDropdownProperties] = useState({});
+    const db = props.db;
+
+    const [canvasX, setCanvasX] = useState();
+    const [canvasY, setCanvasY] = useState();
     
 /* --obsolete, because of using background-image in css--
     useEffect(() => {
@@ -52,14 +57,13 @@ const Canvas = (props) => {
         ctx.stroke();
         ctx.stroke();
         ctx.stroke();
-        
+
+        setCanvasX(x);
+        setCanvasY(y);
         
     }
  
     const showDropdownMenu = (e) => {
-        console.log('clicked 2');
-        const canvas = canvasRef.current;
-        console.log(canvasRef);
         const tempDropdownProperties = {
             display: 'inline-block',
             left: e.pageX,
@@ -67,31 +71,68 @@ const Canvas = (props) => {
         }
         setDropdownProperties(tempDropdownProperties);
         console.log(dropdownProperties);
-
     }
+   
 
     return (
         
         <div>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search}/>
             <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />
-            <DropdownMenu dropdownProperties={dropdownProperties} />
+            <DropdownMenu canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
         </div>
        
     );
 };
 
+//comparison of coordinates to canvas only works if image and canvas size are the same
+
 
 const DropdownMenu = (props) => {
 
+     
+    
+    const loadImageCoordinates = async () => {
+     
+
+        const docRef = doc(props.db, "search_images", "pokemon");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+        } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        }
+        return docSnap.data();
+    }
+
+    const checkValidTarget = async (name) => {
+        const docData = await loadImageCoordinates();
+
+        
+        if (docData !== 'undefined') {
+            console.log(docData);
+
+            for (const field in docData) {
+                console.log(field);
+                if (field === name) {
+                        console.log('OK');
+                        if (props.canvasX > docData.Horsea.topLeft.x) {
+                    
+                        }
+                    }
+            }
+        };
+    };
 
 
     return (
         <div className="dropdown" style={props.dropdownProperties}>
             <div className="dropdown-content">
-                <button>Togepi</button>
-                <button>Wobbuffet</button>
-                <button>Horsea</button>
+                <button onClick={()=>checkValidTarget('Togepi')}>Togepi</button>
+                <button onClick={()=>checkValidTarget('Wobbuffet')}>Wobbuffet</button>
+                <button onClick={()=>checkValidTarget('Horsea')}>Horsea</button>
             </div>
         </div>
     )
