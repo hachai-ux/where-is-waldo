@@ -9,6 +9,8 @@ const Canvas = (props) => {
     const imageRef = useRef(null);
     const [dropdownProperties, setDropdownProperties] = useState({});
     const db = props.db;
+     const rectSize = 50;
+
 
     const [canvasX, setCanvasX] = useState();
     const [canvasY, setCanvasY] = useState();
@@ -47,8 +49,6 @@ const Canvas = (props) => {
         console.log(x);
         console.log(y);
 
-        const rectSize = 50;
-
         
         ctx.beginPath();
         ctx.rect(x - (rectSize / 2), y - (rectSize / 2), rectSize, rectSize);
@@ -79,7 +79,7 @@ const Canvas = (props) => {
         <div>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search}/>
             <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />
-            <DropdownMenu canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
+            <DropdownMenu rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
         </div>
        
     );
@@ -117,10 +117,29 @@ const DropdownMenu = (props) => {
             for (const field in docData) {
                 console.log(field);
                 if (field === name) {
-                        console.log('OK');
-                        if (props.canvasX > docData.Horsea.topLeft.x) {
-                    
+                    //top left and bottom right corner is enough for the database(for next time)
+                    console.log(props.canvasX);
+                    console.log(docData[field].topLeft.x);
+                    //compare targeting box to backend "box"/coordinates
+                    //Check if at least one corner of the targeting box overlaps with the field/pokemon box
+                    //Also check of targeting box is bigger and contains the pokemon's box
+                    //Also valid if only edges(not corners) of the targeting box are in the pokemon's box
+                    //->The 3 cases are touches, contains and overlaps
+                    console.log(props.rectSize / 2);
+                    if ((((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y)) || 
+                        (((props.canvasX + props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y)) ||
+                        (((props.canvasX + props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
+                        (((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
+                        (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) <= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) >= docData[field].bottomRight.y)) ||
+                        (((props.canvasX + props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) <= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) >= docData[field].bottomRight.y)) ||
+                        (((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) <= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) >= docData[field].bottomRight.y)) ||
+                        (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
+                        (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y))) {
+                            console.log('Valid');
                         }
+                        else {
+                            console.log('Invalid');
+                    }
                     }
             }
         };
