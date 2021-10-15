@@ -5,6 +5,7 @@ import pokemon_search from '../images/Pokemon_Search.png';
 
 const Canvas = (props) => {
 
+    const canvasImageRef = useRef(null);
     const canvasRef = useRef(null);
     const canvasMarkerRef = useRef(null);
     const imageRef = useRef(null);
@@ -37,11 +38,9 @@ const Canvas = (props) => {
     );
 
     
-/* --obsolete, because of using background-image in css--
-    //could use layers(multiple canvases)
 
     useEffect(() => {
-        const canvas = canvasRef.current;
+        const canvas = canvasImageRef.current;
         const ctx = canvas.getContext('2d');
       
        
@@ -53,11 +52,10 @@ const Canvas = (props) => {
         };
 
   
-     
-    //Our first draw
+   
 
     }, [])
-    */
+    
     
     const drawTargetingBox = (e) => {
         console.log('clicked 1');
@@ -141,6 +139,8 @@ const Canvas = (props) => {
         <div>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
             <div className='canvas-container'>
+                
+                <canvas id='image-ref' ref={canvasImageRef} width="1440" height="900" {...props}  />
                 <canvas id='marker' ref={canvasMarkerRef} width="1440" height="900" {...props}  />
                 <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />    
             </div>

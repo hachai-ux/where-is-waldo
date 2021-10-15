@@ -9,8 +9,15 @@
 .canvas-container {
   position: relative;
 }
+
+canvas#image-ref {
+  z-index: -3;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 canvas#marker {
-  background-image: url("./images/Pokemon_Search.png");
   z-index: -2;
   position: absolute;
   left: 0;
