@@ -27,10 +27,21 @@ function App() {
   return (
     <div className="App">
       <h1>Find and click on the 3 pokemon to win</h1>
-            <div>
+            <div className='display-container'>
+              <div>
                 <img className='pokemon-display' alt="Togepi" src={togepi} />
-                <img className='pokemon-display' alt="Wobbuffett" src={wobbuffet} />
-                <img className='pokemon-display' alt="Horsea" src={horsea}/>
+                <p>Togepi</p> 
+        </div>
+        <div>
+          <img className='pokemon-display' alt="Wobbuffet" src={wobbuffet} />
+          <p>Wobbuffet</p>
+        </div>
+        <div>
+          <img className='pokemon-display' alt="Horsea" src={horsea} />
+          <p>Horsea</p>
+        </div>
+                
+              
             </div>
       <Canvas db={db} />
     </div>
