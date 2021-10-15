@@ -15,6 +15,27 @@ const Canvas = (props) => {
 
     const [canvasX, setCanvasX] = useState();
     const [canvasY, setCanvasY] = useState();
+
+    const [searchTargets, setSearchTargets] = useState(
+[
+    {
+        id: 1,
+        name: "Togepi",
+        marked: false
+      },
+      {
+        id: 2,
+        name: "Horsea",
+        marked: false
+      },
+       {
+        id: 3,
+        name: "Wobbuffet",
+        marked: false
+      },
+]
+    );
+
     
 /* --obsolete, because of using background-image in css--
     //could use layers(multiple canvases)
@@ -66,20 +87,42 @@ const Canvas = (props) => {
         
     }
 
-    const drawMarker = () => {
+    const drawMarker = (name) => {
 
-        const canvas = canvasMarkerRef.current;
-        const ctx = canvas.getContext('2d');
+        searchTargets.forEach(target => {
+            if (target.name === name) {
+                console.log(target.name);
+                if (target.marked === false) {
+                        
+                    const canvas = canvasMarkerRef.current;
+                    const ctx = canvas.getContext('2d');
 
-        console.log(canvas);
-        
-        ctx.beginPath();
-        ctx.rect(canvasX - (rectSize / 2), canvasY - (rectSize / 2), rectSize, rectSize);
-        ctx.strokeStyle = "rgba(0,0,0,1)";
-        //transparent probably due to pixel density
-        ctx.stroke();
-        ctx.stroke();
-        ctx.stroke();
+                    console.log(canvas);
+                        
+                    ctx.beginPath();
+                    ctx.rect(canvasX - (rectSize / 2), canvasY - (rectSize / 2), rectSize, rectSize);
+                    ctx.strokeStyle = "rgba(0,0,0,1)";
+                    //transparent probably due to pixel density
+                    ctx.stroke();
+                    ctx.stroke();
+                    ctx.stroke();
+
+                    setSearchTargets(searchTargets.map((object) => {
+                        if (object.name === name) {
+                            object.marked = true;
+                        }
+                        return object;
+                    }));
+                       
+                }
+            }
+        });
+            
+            
+
+      
+
+
     }
  
     const showDropdownMenu = (e) => {
@@ -101,7 +144,7 @@ const Canvas = (props) => {
                 <canvas id='marker' ref={canvasMarkerRef} width="1440" height="900" {...props}  />
                 <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />    
             </div>
-            <DropdownMenu drawMarker={drawMarker} rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
+            <DropdownMenu searchTargets={searchTargets} drawMarker={drawMarker} rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
         </div>
        
     );
@@ -158,12 +201,12 @@ const DropdownMenu = (props) => {
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y))) {
                         console.log('Valid');
-                        props.drawMarker();
+                        props.drawMarker(name);
                         }
                         else {
                             console.log('Invalid');
-                    }
-                    }
+                        }
+                };
             }
         };
     };
@@ -172,9 +215,9 @@ const DropdownMenu = (props) => {
     return (
         <div className="dropdown" style={props.dropdownProperties}>
             <div className="dropdown-content">
-                <button onClick={()=>checkValidTarget('Togepi')}>Togepi</button>
-                <button onClick={()=>checkValidTarget('Wobbuffet')}>Wobbuffet</button>
-                <button onClick={()=>checkValidTarget('Horsea')}>Horsea</button>
+                <button onClick={()=>checkValidTarget(props.searchTargets[0].name)}>{props.searchTargets[0].name}</button>
+                <button onClick={()=>checkValidTarget(props.searchTargets[1].name)}>{props.searchTargets[1].name}</button>
+                <button onClick={()=>checkValidTarget(props.searchTargets[2].name)}>{props.searchTargets[2].name}</button>
             </div>
         </div>
     )
