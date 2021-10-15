@@ -6,6 +6,7 @@ import pokemon_search from '../images/Pokemon_Search.png';
 const Canvas = (props) => {
 
     const canvasRef = useRef(null);
+    const canvasMarkerRef = useRef(null);
     const imageRef = useRef(null);
     const [dropdownProperties, setDropdownProperties] = useState({});
     const db = props.db;
@@ -16,6 +17,8 @@ const Canvas = (props) => {
     const [canvasY, setCanvasY] = useState();
     
 /* --obsolete, because of using background-image in css--
+    //could use layers(multiple canvases)
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -62,6 +65,22 @@ const Canvas = (props) => {
         setCanvasY(y);
         
     }
+
+    const drawMarker = () => {
+
+        const canvas = canvasMarkerRef.current;
+        const ctx = canvas.getContext('2d');
+
+        console.log(canvas);
+        
+        ctx.beginPath();
+        ctx.rect(canvasX - (rectSize / 2), canvasY - (rectSize / 2), rectSize, rectSize);
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        //transparent probably due to pixel density
+        ctx.stroke();
+        ctx.stroke();
+        ctx.stroke();
+    }
  
     const showDropdownMenu = (e) => {
         const tempDropdownProperties = {
@@ -77,9 +96,12 @@ const Canvas = (props) => {
     return (
         
         <div>
-            <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search}/>
-            <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />
-            <DropdownMenu rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
+            <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
+            <div className='canvas-container'>
+                <canvas id='marker' ref={canvasMarkerRef} width="1440" height="900" {...props}  />
+                <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />    
+            </div>
+            <DropdownMenu drawMarker={drawMarker} rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
         </div>
        
     );
@@ -135,7 +157,8 @@ const DropdownMenu = (props) => {
                         (((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) <= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) >= docData[field].bottomRight.y)) ||
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y))) {
-                            console.log('Valid');
+                        console.log('Valid');
+                        props.drawMarker();
                         }
                         else {
                             console.log('Invalid');
