@@ -71,7 +71,7 @@ const Timer = (props) => {
   
     const showRecordPopup = () => {
         if (props.searchEnd === true) {
-        return <RecordPopup docRef={docRef} />
+            return <RecordPopup db={props.db} docRef={docRef} />
     }
 } 
 
