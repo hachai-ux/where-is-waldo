@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { collection, doc, DocumentSnapshot, getDoc } from "firebase/firestore";
 import pokemon_search from '../images/Pokemon_Search.png';
+import Timer from './Timer';
 
 
 const Canvas = (props) => {
@@ -16,6 +17,7 @@ const Canvas = (props) => {
 
     const [canvasX, setCanvasX] = useState();
     const [canvasY, setCanvasY] = useState();
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const [searchTargets, setSearchTargets] = useState(
 [
@@ -36,6 +38,7 @@ const Canvas = (props) => {
       },
 ]
     );
+    const [searchEnd, setSearchEnd] = useState(false);
 
     
 
@@ -49,6 +52,7 @@ const Canvas = (props) => {
         image.src = pokemon_search;
         image.onload = function () {
             ctx.drawImage(image, 0, 0);
+            setImageLoaded(true);
         };
 
   
@@ -115,6 +119,10 @@ const Canvas = (props) => {
                 }
             }
         });
+
+        if (searchTargets.every(object => object.marked === true) === true) {
+            setSearchEnd(true);
+        }
             
             
 
@@ -137,6 +145,7 @@ const Canvas = (props) => {
     return (
         
         <div>
+            <Timer searchEnd={searchEnd} imageLoaded={imageLoaded} db={db}/>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
             <div className='canvas-container'>
                 

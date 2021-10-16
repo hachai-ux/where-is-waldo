@@ -3,6 +3,7 @@ import togepi from './images/Togepi.png';
 import wobbuffet from './images/Wobbuffet.png';
 import horsea from './images/Horsea.png';
 
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -26,6 +27,7 @@ const db = getFirestore(app);
 function App() {
   return (
     <div className="App">
+      
       <h1>Find and click on the 3 pokemon to win</h1>
             <div className='display-container'>
               <div>
@@ -42,7 +44,7 @@ function App() {
         </div>
                 
               
-            </div>
+      </div>
       <Canvas db={db} />
     </div>
   );
