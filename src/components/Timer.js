@@ -1,5 +1,5 @@
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import RecordPopup from './RecordPopup';
 import Leaderboard from './Leaderboard';
@@ -49,7 +49,7 @@ const Timer = (props) => {
 
     useEffect (() => {
 
-       
+        console.log(timestampEndLoaded);
         if (props.searchEnd === true && timestampEndLoaded === false) {
             saveEndTime();
         }
@@ -59,14 +59,16 @@ const Timer = (props) => {
                 
                 async function saveEndTime() {
             // Add a new time entry to the Firebase database.
+                    
+                    //run it only once or else there seems to be a bug with not finding the document and timestampEnd updating too much
                     try {
                 pause();
                 await updateDoc(docRef, {
                     timestampEnd: serverTimestamp()
                 });
                         console.log('save end time')
-                       
                         setTimestampEndLoaded(true);
+                      
                         
                       
              
@@ -80,7 +82,7 @@ const Timer = (props) => {
       
      
 
-    },[props.searchEnd, start, pause]);
+    },[props.searchEnd]);
 
   
     const EndingPopups = () => {
