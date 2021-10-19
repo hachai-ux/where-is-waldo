@@ -2,10 +2,13 @@ import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firesto
 import { useState, useEffect } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import RecordPopup from './RecordPopup';
+import Leaderboard from './Leaderboard';
 
 const Timer = (props) => {
 
     const [docRef, setDocRef] = useState(null);
+    const [leaderboardActive, setLeaderboardActive] = useState(false);
+    const [timestampEndLoaded, setTimestampEndLoaded] = useState(false);
 
     const {
     seconds,
@@ -15,29 +18,22 @@ const Timer = (props) => {
     pause
     } = useStopwatch({ autoStart: false });
 
-
-
-
-    useEffect (() => {
-
-        if (props.imageLoaded === true) {
+    useEffect(() => {
+         if (props.imageLoaded === true) {
             saveStartTime();
-        }
-        if (props.searchEnd === true) {
-            saveEndTime();
-        }
-
-
-          async function saveStartTime() {
+         }
+        
+         async function saveStartTime() {
   // Add a new time entry to the Firebase database.
         try {
             if (docRef === null) {
-                const tempDocRef = await addDoc(collection(props.db, 'currentPlayers'), {
+                const tempDocRef = await addDoc(collection(props.db, 'current_players'), {
                     timestampStart: serverTimestamp()
                 });
                 console.log(tempDocRef);
                 start();
                 setDocRef(tempDocRef);
+                
                 
                 
       }
@@ -47,6 +43,19 @@ const Timer = (props) => {
                 console.error('Error writing new timestamp to Firebase Database', error);
             }
                 }
+    
+},[props.imageLoaded])
+
+
+    useEffect (() => {
+
+       
+        if (props.searchEnd === true) {
+            saveEndTime();
+        }
+
+
+         
                 
                 async function saveEndTime() {
             // Add a new time entry to the Firebase database.
@@ -55,7 +64,11 @@ const Timer = (props) => {
                 await updateDoc(docRef, {
                     timestampEnd: serverTimestamp()
                 });
-                
+                       
+                        setTimestampEndLoaded(true);
+
+                      
+             
                 
             }
             catch(error) {
@@ -66,14 +79,20 @@ const Timer = (props) => {
       
      
 
-    },[props.imageLoaded, docRef, props.db, props.searchEnd, start, pause]);
+    },[props.imageLoaded, props.searchEnd, start, pause]);
 
   
-    const showRecordPopup = () => {
-        if (props.searchEnd === true) {
-            return <RecordPopup db={props.db} docRef={docRef} />
+    const EndingPopups = () => {
+  
+        if (props.searchEnd === true && timestampEndLoaded === true) {
+            return <RecordPopup db={props.db} docRefID={docRef.id} />
+        }
+        else if (leaderboardActive === true) {
+            return <Leaderboard />;
+        }
+        else return null;
     }
-} 
+
 
 
 
@@ -83,7 +102,7 @@ const Timer = (props) => {
             <div style={{ fontSize: '100px' }}>
                    <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
             </div>
-            {showRecordPopup()};
+            <EndingPopups />
        
         </div>
     )

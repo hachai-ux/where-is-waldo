@@ -39,6 +39,7 @@ const Canvas = (props) => {
 ]
     );
     const [searchEnd, setSearchEnd] = useState(false);
+    
 
     
 
@@ -140,12 +141,16 @@ const Canvas = (props) => {
         setDropdownProperties(tempDropdownProperties);
         console.log(dropdownProperties);
     }
+
+    const setSearchEndFalse = () => {
+        setSearchEnd(false);
+    }
    
 
     return (
         
         <div>
-            <Timer searchEnd={searchEnd} imageLoaded={imageLoaded} db={db}/>
+            <Timer setSearchEndFalse={setSearchEndFalse}searchEnd={searchEnd} imageLoaded={imageLoaded} db={db}/>
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
             <div className='canvas-container'>
                 
