@@ -57,7 +57,7 @@ const RecordPopup = (props) => {
         else return null;
     }
 
-    const ScoreTimeMemo = React.memo(ScoreTime);
+   
 
    
     
@@ -78,7 +78,7 @@ const RecordPopup = (props) => {
         <div>
             <div className="form-popup" id="record">
                 <form onSubmit={saveScore} className="form-container">
-                    <ScoreTimeMemo />
+                    <ScoreTime />
 
                     <label htmlFor="name"><b>Enter name to save score</b></label>
                     <input type="text" placeholder="Name" name="name" required />

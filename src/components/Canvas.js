@@ -38,7 +38,6 @@ const Canvas = (props) => {
       },
 ]
     );
-    const [searchEnd, setSearchEnd] = useState(false);
     
 
     
@@ -122,7 +121,7 @@ const Canvas = (props) => {
         });
 
         if (searchTargets.every(object => object.marked === true) === true) {
-            setSearchEnd(true);
+            props.setSearchEndTrue();
         }
             
             
@@ -142,21 +141,18 @@ const Canvas = (props) => {
         console.log(dropdownProperties);
     }
 
-    const setSearchEndFalse = () => {
-        setSearchEnd(false);
-    }
-   
+
 
     return (
         
         <div>
-            <Timer setSearchEndFalse={setSearchEndFalse}searchEnd={searchEnd} imageLoaded={imageLoaded} db={db}/>
+            <Timer assignDocRef={props.assignDocRef} setSearchEndFalse={props.setSearchEndFalse} searchEnd={props.searchEnd} imageLoaded={imageLoaded} db={db} />
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
             <div className='canvas-container'>
                 
-                <canvas id='image-ref' ref={canvasImageRef} width="1440" height="900" {...props}  />
-                <canvas id='marker' ref={canvasMarkerRef} width="1440" height="900" {...props}  />
-                <canvas id='search-image' ref={canvasRef} width="1440" height="900" {...props} onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />    
+                <canvas id='image-ref' ref={canvasImageRef} width="1440" height="900" />
+                <canvas id='marker' ref={canvasMarkerRef} width="1440" height="900"   />
+                <canvas id='search-image' ref={canvasRef} width="1440" height="900" onClick={(e) => { drawTargetingBox(e); showDropdownMenu(e) }}  />    
             </div>
             <DropdownMenu searchTargets={searchTargets} drawMarker={drawMarker} rectSize={rectSize} canvasX={canvasX} canvasY={canvasY} db={db} dropdownProperties={dropdownProperties} />
         </div>

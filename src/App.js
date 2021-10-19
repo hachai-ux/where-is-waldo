@@ -3,10 +3,13 @@ import togepi from './images/Togepi.png';
 import wobbuffet from './images/Wobbuffet.png';
 import horsea from './images/Horsea.png';
 
+import { useState } from 'react';
+import Leaderboard from './components/Leaderboard';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import RecordPopup from './components/RecordPopup';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,6 +28,36 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 function App() {
+
+  const [searchEnd, setSearchEnd] = useState(false);
+  const [timestampEndLoaded, setTimestampEndLoaded] = useState(false);
+  const [docRef, setDocRef] = useState(null);
+  const [leaderboardActive, setLeaderboardActive] = useState(false);
+
+  const setSearchEndTrue = () => {
+    setSearchEnd(true);
+  }
+  const setSearchEndFalse = () => {
+    setSearchEnd(false);
+  }
+
+  const assignDocRef = (tempDocRef) => {
+    setDocRef(tempDocRef);
+  };
+
+ const EndingPopups = () => {
+  
+        if (searchEnd === true && timestampEndLoaded === true) {
+            return <RecordPopup  db={db} docRefID={docRef.id} />
+        }
+        else if (leaderboardActive === true) {
+            return <Leaderboard />;
+        }
+        else return null;
+    }
+
+
+
   return (
     <div className="App">
       
@@ -45,7 +78,8 @@ function App() {
                 
               
       </div>
-      <Canvas db={db} />
+      <Canvas assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
+      <EndingPopups />
     </div>
   );
 }
