@@ -50,7 +50,7 @@ const Timer = (props) => {
     useEffect (() => {
 
        
-        if (props.searchEnd === true) {
+        if (props.searchEnd === true && timestampEndLoaded === false) {
             saveEndTime();
         }
 
@@ -64,9 +64,10 @@ const Timer = (props) => {
                 await updateDoc(docRef, {
                     timestampEnd: serverTimestamp()
                 });
+                        console.log('save end time')
                        
                         setTimestampEndLoaded(true);
-
+                        
                       
              
                 
@@ -79,7 +80,7 @@ const Timer = (props) => {
       
      
 
-    },[props.imageLoaded, props.searchEnd, start, pause]);
+    },[props.searchEnd, start, pause]);
 
   
     const EndingPopups = () => {
