@@ -1,13 +1,12 @@
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
 import React,{ useState, useEffect, useRef } from 'react';
 import { useStopwatch } from 'react-timer-hook';
-import RecordPopup from './RecordPopup';
 
 
 const Timer = (props) => {
 
  
-    const [timestampEndLoaded, setTimestampEndLoaded] = useState(false);
+    
     console.log('render timer');
 
     const {
@@ -21,13 +20,15 @@ const Timer = (props) => {
    
 
     useEffect(() => {
-         if (props.imageLoaded === true) {
+        if (props.imageLoaded === true) {
+            console.log('image loaded');
             saveStartTime();
          }
         
          async function saveStartTime() {
   // Add a new time entry to the Firebase database.
-        try {
+             try {
+                 console.log(props.docRef);
             if (props.docRef === null) {
                 const tempDocRef = await addDoc(collection(props.db, 'current_players'), {
                     timestampStart: serverTimestamp()
@@ -51,8 +52,9 @@ const Timer = (props) => {
 
     useEffect (() => {
 
-        console.log(timestampEndLoaded);
-        if (props.searchEnd === true && timestampEndLoaded === false) {
+        console.log(props.timestampEndLoaded);
+         console.log(props.searchEnd);
+        if (props.searchEnd === true && props.timestampEndLoaded === false) {
             saveEndTime();
         }
 
@@ -61,15 +63,16 @@ const Timer = (props) => {
                 
                 async function saveEndTime() {
             // Add a new time entry to the Firebase database.
-                    
+                    console.log('save end time 1')
+                    console.log(props.docRef)
                     //run it only once or else there seems to be a bug with not finding the document and timestampEnd updating too much
                     try {
                 pause();
                 await updateDoc(props.docRef, {
                     timestampEnd: serverTimestamp()
                 });
-                        console.log('save end time')
-                        setTimestampEndLoaded(true);
+                        console.log('save end time 2')
+                        props.assignTimestampEndLoaded();
                       
                         
                       

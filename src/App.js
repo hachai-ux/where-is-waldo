@@ -43,11 +43,20 @@ function App() {
 
   const assignDocRef = (tempDocRef) => {
     setDocRef(tempDocRef);
+    console.log(tempDocRef);
+  };
+
+   const assignTimestampEndLoaded = () => {
+    setTimestampEndLoaded(true);
+    
   };
 
  const EndingPopups = () => {
   
-        if (searchEnd === true && timestampEndLoaded === true) {
+   console.log(searchEnd);
+    console.log(timestampEndLoaded);
+   if (searchEnd === true && timestampEndLoaded === true) {
+    
             return <RecordPopup  db={db} docRefID={docRef.id} />
         }
         else if (leaderboardActive === true) {
@@ -78,7 +87,7 @@ function App() {
                 
               
       </div>
-      <Canvas assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
+      <Canvas timestampEndLoaded={timestampEndLoaded} docRef={docRef} assignTimestampEndLoaded={assignTimestampEndLoaded} assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
       <EndingPopups />
     </div>
   );

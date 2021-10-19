@@ -146,7 +146,7 @@ const Canvas = (props) => {
     return (
         
         <div>
-            <Timer assignDocRef={props.assignDocRef} setSearchEndFalse={props.setSearchEndFalse} searchEnd={props.searchEnd} imageLoaded={imageLoaded} db={db} />
+            <Timer timestampEndLoaded={props.timestampEndLoaded} docRef={props.docRef} assignTimestampEndLoaded={props.assignTimestampEndLoaded} assignDocRef={props.assignDocRef} setSearchEndFalse={props.setSearchEndFalse} searchEnd={props.searchEnd} imageLoaded={imageLoaded} db={db} />
             <img ref={imageRef} className="search-image" alt='Pokemon Search' src={pokemon_search} />
             <div className='canvas-container'>
                 
