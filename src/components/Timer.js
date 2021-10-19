@@ -1,5 +1,5 @@
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
-import { useState, useEffect, useRef } from 'react';
+import React,{ useState, useEffect, useRef } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import RecordPopup from './RecordPopup';
 import Leaderboard from './Leaderboard';
@@ -9,6 +9,7 @@ const Timer = (props) => {
     const [docRef, setDocRef] = useState(null);
     const [leaderboardActive, setLeaderboardActive] = useState(false);
     const [timestampEndLoaded, setTimestampEndLoaded] = useState(false);
+    console.log('render timer');
 
     const {
     seconds,
@@ -17,6 +18,8 @@ const Timer = (props) => {
     start,
     pause
     } = useStopwatch({ autoStart: false });
+
+    const RecordPopupMemo = React.memo(RecordPopup);
 
     useEffect(() => {
          if (props.imageLoaded === true) {
@@ -88,7 +91,7 @@ const Timer = (props) => {
     const EndingPopups = () => {
   
         if (props.searchEnd === true && timestampEndLoaded === true) {
-            return <RecordPopup db={props.db} docRefID={docRef.id} />
+            return <RecordPopupMemo db={props.db} docRefID={docRef.id} />
         }
         else if (leaderboardActive === true) {
             return <Leaderboard />;

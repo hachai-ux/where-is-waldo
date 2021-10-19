@@ -1,5 +1,5 @@
 import { deleteDoc, getDoc, doc } from 'firebase/firestore';
-import { useState, useEffect} from 'react';
+import React,{ useState, useEffect} from 'react';
 
 
 const RecordPopup = (props) => {
@@ -7,6 +7,8 @@ const RecordPopup = (props) => {
     
     const [timestampStart, setTimestampStart] = useState(null);
     const [timestampEnd, setTimestampEnd] = useState(null);
+    const [time, setTime] = useState(null);
+    console.log('show recordpopup only once');
     
 
     useEffect(() => {
@@ -32,9 +34,10 @@ const RecordPopup = (props) => {
                 console.log("No such document!");
   
             }
-        
+            setTime(`${docSnap.data().timestampEnd - docSnap.data().timestampStart}` + "s");
+            console.log('once please');
         };
-    
+
         getTimestampData();
         
 
@@ -42,8 +45,7 @@ const RecordPopup = (props) => {
 
     const ScoreTime = () => {
         if (timestampStart !== null && timestampEnd !== null) {
-            
-            const time = `${timestampEnd - timestampStart}`+"s";
+
             return (
                 <div>
                     You found all Pokemon in {time}.
@@ -54,7 +56,8 @@ const RecordPopup = (props) => {
 
         else return null;
     }
-      
+
+    const ScoreTimeMemo = React.memo(ScoreTime);
 
    
     
@@ -70,23 +73,19 @@ const RecordPopup = (props) => {
         console.log(timestampEnd);
 
     }
-
  
-
-
     return (
         <div>
             <div className="form-popup" id="record">
                 <form onSubmit={saveScore} className="form-container">
-                    <ScoreTime />
+                    <ScoreTimeMemo />
 
                     <label htmlFor="name"><b>Enter name to save score</b></label>
                     <input type="text" placeholder="Name" name="name" required />
 
                     <button type="submit" className="btn">Save</button>
                 </form>
-            </div>
-                        
+            </div>               
         </div>
     )
 }
