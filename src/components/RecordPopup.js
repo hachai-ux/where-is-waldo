@@ -5,8 +5,8 @@ import { useState, useEffect} from 'react';
 const RecordPopup = (props) => {
 //clicking on submit will read data from the database, and submit that data to the leaderboard database
     
-    const [timestampStart, setTimestampStart] = useState();
-    const [timestampEnd, setTimestampEnd] = useState();
+    const [timestampStart, setTimestampStart] = useState(null);
+    const [timestampEnd, setTimestampEnd] = useState(null);
     
 
     useEffect(() => {
@@ -39,6 +39,21 @@ const RecordPopup = (props) => {
         
 
     }, []);
+
+    const ScoreTime = () => {
+        if (timestampStart !== null && timestampEnd !== null) {
+            
+            const time = `${timestampEnd - timestampStart}`+"s";
+            return (
+                <div>
+                    You found all Pokemon in {time}.
+                </div>
+        )
+        }
+        
+
+        else return null;
+    }
       
 
    
@@ -63,7 +78,7 @@ const RecordPopup = (props) => {
         <div>
             <div className="form-popup" id="record">
                 <form onSubmit={saveScore} className="form-container">
-                    <h1>Time</h1>
+                    <ScoreTime />
 
                     <label htmlFor="name"><b>Enter name to save score</b></label>
                     <input type="text" placeholder="Name" name="name" required />
