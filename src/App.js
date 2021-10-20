@@ -33,12 +33,17 @@ function App() {
   const [timestampEndLoaded, setTimestampEndLoaded] = useState(false);
   const [docRef, setDocRef] = useState(null);
   const [leaderboardActive, setLeaderboardActive] = useState(false);
+  const [time, setTime] = useState(null);
 
   const setSearchEndTrue = () => {
     setSearchEnd(true);
   }
   const setSearchEndFalse = () => {
     setSearchEnd(false);
+  }
+
+  const assignTime = (tempTime) => {
+    setTime(tempTime);
   }
 
   const assignDocRef = (tempDocRef) => {
@@ -60,7 +65,7 @@ function App() {
             return <RecordPopup  db={db} docRefID={docRef.id} />
         }
         else if (leaderboardActive === true) {
-            return <Leaderboard />;
+            return <Leaderboard db={db} />;
         }
         else return null;
     }
@@ -87,7 +92,7 @@ function App() {
                 
               
       </div>
-      <Canvas timestampEndLoaded={timestampEndLoaded} docRef={docRef} assignTimestampEndLoaded={assignTimestampEndLoaded} assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
+      <Canvas time={time} assignTime={assignTime} timestampEndLoaded={timestampEndLoaded} docRef={docRef} assignTimestampEndLoaded={assignTimestampEndLoaded} assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
       <EndingPopups />
     </div>
   );

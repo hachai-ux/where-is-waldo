@@ -7,7 +7,7 @@ const RecordPopup = (props) => {
     
     const [timestampStart, setTimestampStart] = useState(null);
     const [timestampEnd, setTimestampEnd] = useState(null);
-    const [time, setTime] = useState(null);
+    
     console.log('show recordpopup only once');
     
 
@@ -34,8 +34,9 @@ const RecordPopup = (props) => {
                 console.log("No such document!");
   
             }
-            setTime(`${docSnap.data().timestampEnd - docSnap.data().timestampStart}` + "s");
+            props.assignTime(`${docSnap.data().timestampEnd - docSnap.data().timestampStart}` + "s");
             console.log('once please');
+            console.log(docSnap.data().timestampEnd - docSnap.data().timestampStart);
         };
 
         getTimestampData();
@@ -48,7 +49,7 @@ const RecordPopup = (props) => {
 
             return (
                 <div>
-                    You found all Pokemon in {time}.
+                    You found all Pokemon in {props.time}.
                 </div>
         )
         }
