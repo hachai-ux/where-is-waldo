@@ -34,7 +34,7 @@ const RecordPopup = (props) => {
                 console.log("No such document!");
   
             }
-            props.assignTime(`${docSnap.data().timestampEnd - docSnap.data().timestampStart}` + "s");
+            props.assignTime(docSnap.data().timestampEnd - docSnap.data().timestampStart);
             console.log('once please');
             console.log(docSnap.data().timestampEnd - docSnap.data().timestampStart);
         };

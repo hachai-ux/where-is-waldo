@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { deleteDoc, getDocs, query, collection } from 'firebase/firestore';
+import { deleteDoc, getDocs, query, collection, orderBy, limit } from 'firebase/firestore';
 
 
 //clicking on submit will read data from the database, and submit that data to the leaderboard database
@@ -11,8 +11,8 @@ const Leaderboard = (props) => {
   useEffect(() => {
 
   async function getLeaderboardData() {
-      
-    const q = query(collection(props.db, "leaderboard"));
+
+    const q = query(collection(props.db, "leaderboard"), orderBy('time', 'asc'), limit(10));
 
     const querySnapshot = await getDocs(q);
     setLeaderboardScores(querySnapshot.docs.map((doc) => { 
@@ -27,14 +27,6 @@ const Leaderboard = (props) => {
     
   }, [])
 
-  const saveLeaderboardData = async () => {
-        
-      }
-
-  
-  const deleteOldScore = () => {
-
-  }
 
   function ScoresList() {
     //list not table for now
