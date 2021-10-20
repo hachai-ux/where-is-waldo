@@ -18,7 +18,7 @@ const Leaderboard = (props) => {
     setLeaderboardScores(querySnapshot.map((doc) => { 
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
-      return doc.data();
+      return doc;
 
     }));
 
@@ -35,20 +35,31 @@ const Leaderboard = (props) => {
   const deleteOldScore = () => {
 
   }
+
+  function ScoresList() {
+    //list not table for now
+  const scoreItems = leaderboardScores.map((doc) =>
+    <li key={doc.id}>
+      {doc.data().name} {doc.data().time}s</li>
+  );
+  return (
+    <ul>{scoreItems}</ul>
+  );
+}
     
   
 
     return (
       <div>
-        <div className="form-popup" id="record">
-                <form onSubmit={saveScore} className="form-container">
-                    <ScoreTime />
+        <div className="form-popup" id="leaderboard">
+                <div className="form-container">
+                    <ScoresList />
 
                     <label htmlFor="name"><b>Enter name to save score</b></label>
                     <input type="text" placeholder="Name" name="name" required />
 
                     <button type="submit" className="btn">Save</button>
-                </form>
+                </div>
             </div>       
            
                         
