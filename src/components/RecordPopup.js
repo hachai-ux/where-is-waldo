@@ -1,4 +1,4 @@
-import { deleteDoc, getDoc, doc } from 'firebase/firestore';
+import { deleteDoc, getDoc, doc, addDoc, collection } from 'firebase/firestore';
 import React,{ useState, useEffect} from 'react';
 
 
@@ -68,12 +68,29 @@ const RecordPopup = (props) => {
         await deleteDoc(doc(props.db, "current_players", props.docRef));
     }
 
-    const saveScore = (e) => {
-        e.preventDefault();
+  
+       
+     
+async function saveScore(e) {
+ e.preventDefault();
         console.log(timestampStart);
-        console.log(timestampEnd);
+    console.log(timestampEnd);
+    console.log(props.db);
+    console.log(props.time);
+    console.log(e.target.value);
+      
+  try {
+    await addDoc(collection(props.db, 'leaderboard'), {
+      name: e.target.name.value,
+      time: props.time,
+    });
+  }
+  catch(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  }
+}
 
-    }
+    
 
     const changeStates = (e) => {
         e.preventDefault();
