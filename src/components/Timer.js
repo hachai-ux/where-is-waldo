@@ -6,9 +6,7 @@ import { useStopwatch } from 'react-timer-hook';
 const Timer = (props) => {
 
  
-    
-    console.log('render timer');
-
+  
     const {
     seconds,
     minutes,
@@ -21,7 +19,7 @@ const Timer = (props) => {
 
     useEffect(() => {
         if (props.imageLoaded === true) {
-            console.log('image loaded');
+      
             saveStartTime();
          }
         
@@ -33,7 +31,7 @@ const Timer = (props) => {
                 const tempDocRef = await addDoc(collection(props.db, 'current_players'), {
                     timestampStart: serverTimestamp()
                 });
-                console.log(tempDocRef);
+     
                 start();
                 props.assignDocRef(tempDocRef);
                 
@@ -52,8 +50,7 @@ const Timer = (props) => {
 
     useEffect (() => {
 
-        console.log(props.timestampEndLoaded);
-         console.log(props.searchEnd);
+    
         if (props.searchEnd === true && props.timestampEndLoaded === false) {
             saveEndTime();
         }
@@ -63,15 +60,14 @@ const Timer = (props) => {
                 
                 async function saveEndTime() {
             // Add a new time entry to the Firebase database.
-                    console.log('save end time 1')
-                    console.log(props.docRef)
+                
                     //run it only once or else there seems to be a bug with not finding the document and timestampEnd updating too much
                     try {
                 pause();
                 await updateDoc(props.docRef, {
                     timestampEnd: serverTimestamp()
                 });
-                        console.log('save end time 2')
+                      
                         props.assignTimestampEndLoaded();
                       
                         

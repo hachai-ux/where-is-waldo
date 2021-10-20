@@ -62,19 +62,14 @@ const Canvas = (props) => {
     
     
     const drawTargetingBox = (e) => {
-        console.log('clicked 1');
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        console.log(canvasRef);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const rect = canvas.getBoundingClientRect();
         //both clientX and left are relative to the viewport
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
  
-        console.log(x);
-        console.log(y);
-
         
         ctx.beginPath();
         ctx.rect(x - (rectSize / 2), y - (rectSize / 2), rectSize, rectSize);
@@ -93,13 +88,12 @@ const Canvas = (props) => {
 
         searchTargets.forEach(target => {
             if (target.name === name) {
-                console.log(target.name);
                 if (target.marked === false) {
                         
                     const canvas = canvasMarkerRef.current;
                     const ctx = canvas.getContext('2d');
 
-                    console.log(canvas);
+
                         
                     ctx.beginPath();
                     ctx.rect(canvasX - (rectSize / 2), canvasY - (rectSize / 2), rectSize, rectSize);
@@ -138,7 +132,7 @@ const Canvas = (props) => {
             top: e.pageY
         }
         setDropdownProperties(tempDropdownProperties);
-        console.log(dropdownProperties);
+
     }
 
 
@@ -174,10 +168,10 @@ const DropdownMenu = (props) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            
         } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+       
         }
         return docSnap.data();
     }
@@ -187,20 +181,19 @@ const DropdownMenu = (props) => {
 
         
         if (docData !== 'undefined') {
-            console.log(docData);
+       
 
             for (const field in docData) {
-                console.log(field);
+         
                 if (field === name) {
                     //top left and bottom right corner is enough for the database(for next time)
-                    console.log(props.canvasX);
-                    console.log(docData[field].topLeft.x);
+               
                     //compare targeting box to backend "box"/coordinates
                     //Check if at least one corner of the targeting box overlaps with the field/pokemon box
                     //Also check of targeting box is bigger and contains the pokemon's box
                     //Also valid if only edges(not corners) of the targeting box are in the pokemon's box
                     //->The 3 cases are touches, contains and overlaps
-                    console.log(props.rectSize / 2);
+                  
                     if ((((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y)) || 
                         (((props.canvasX + props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y)) ||
                         (((props.canvasX + props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
@@ -210,11 +203,11 @@ const DropdownMenu = (props) => {
                         (((props.canvasX - props.rectSize / 2) >= docData[field].topLeft.x) && ((props.canvasX - props.rectSize / 2) <= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) <= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) >= docData[field].bottomRight.y)) ||
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY + props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY + props.rectSize / 2) <= docData[field].bottomRight.y)) ||
                         (((props.canvasX - props.rectSize / 2) <= docData[field].topLeft.x) && ((props.canvasX + props.rectSize / 2) >= docData[field].topRight.x) && ((props.canvasY - props.rectSize / 2) >= docData[field].topLeft.y) && ((props.canvasY - props.rectSize / 2) <= docData[field].bottomRight.y))) {
-                        console.log('Valid');
+                        
                         props.drawMarker(name);
                         }
                         else {
-                            console.log('Invalid');
+                        
                         }
                 };
             }
