@@ -42,6 +42,10 @@ function App() {
     setSearchEnd(false);
   }
 
+  const assignLeaderboardActive = (bool) => {
+    setLeaderboardActive(bool);
+  } 
+
   const assignTime = (tempTime) => {
     setTime(tempTime);
   }
@@ -54,6 +58,11 @@ function App() {
    const assignTimestampEndLoaded = () => {
     setTimestampEndLoaded(true);
     
+   };
+  
+   const assignTimestampEndLoadedFalse = () => {
+    setTimestampEndLoaded(false);
+    
   };
 
  const EndingPopups = () => {
@@ -62,9 +71,9 @@ function App() {
     console.log(timestampEndLoaded);
    if (searchEnd === true && timestampEndLoaded === true) {
     
-            return <RecordPopup  db={db} docRefID={docRef.id} />
+            return <RecordPopup assignLeaderboardActive={assignLeaderboardActive} time={time} assignTime={assignTime}  setSearchEndFalse={setSearchEndFalse} assignTimestampEndLoadedFalse={assignTimestampEndLoadedFalse}  db={db} docRefID={docRef.id} />
         }
-        else if (leaderboardActive === true) {
+   else if (leaderboardActive === true) {
             return <Leaderboard db={db} />;
         }
         else return null;
@@ -92,7 +101,7 @@ function App() {
                 
               
       </div>
-      <Canvas time={time} assignTime={assignTime} timestampEndLoaded={timestampEndLoaded} docRef={docRef} assignTimestampEndLoaded={assignTimestampEndLoaded} assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
+      <Canvas time={time} assignTime={assignTime} assignTimestampEndLoadedFalse={assignTimestampEndLoadedFalse} timestampEndLoaded={timestampEndLoaded} docRef={docRef} assignTimestampEndLoaded={assignTimestampEndLoaded} assignDocRef={assignDocRef} searchEnd={searchEnd} setSearchEndTrue={setSearchEndTrue} setSearchEndFalse={setSearchEndFalse} db={db} />
       <EndingPopups />
     </div>
   );

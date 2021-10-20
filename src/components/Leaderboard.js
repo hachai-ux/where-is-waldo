@@ -15,7 +15,7 @@ const Leaderboard = (props) => {
     const q = query(collection(props.db, "leaderboard"));
 
     const querySnapshot = await getDocs(q);
-    setLeaderboardScores(querySnapshot.map((doc) => { 
+    setLeaderboardScores(querySnapshot.docs.map((doc) => { 
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
       return doc;
@@ -38,13 +38,17 @@ const Leaderboard = (props) => {
 
   function ScoresList() {
     //list not table for now
-  const scoreItems = leaderboardScores.map((doc) =>
-    <li key={doc.id}>
-      {doc.data().name} {doc.data().time}s</li>
-  );
-  return (
-    <ul>{scoreItems}</ul>
-  );
+    if (leaderboardScores !== null) {
+      const scoreItems = leaderboardScores.map((doc) =>
+        <li key={doc.id}>
+          {doc.data().name} {doc.data().time}s</li>
+      );
+      return (
+        <ol>{scoreItems}</ol>
+      );
+      
+    }
+     else return null;
 }
     
   
@@ -52,13 +56,10 @@ const Leaderboard = (props) => {
     return (
       <div>
         <div className="form-popup" id="leaderboard">
-                <div className="form-container">
+                
+          <div className="form-container">
+            <h1>Leaderboard</h1>
                     <ScoresList />
-
-                    <label htmlFor="name"><b>Enter name to save score</b></label>
-                    <input type="text" placeholder="Name" name="name" required />
-
-                    <button type="submit" className="btn">Save</button>
                 </div>
             </div>       
            

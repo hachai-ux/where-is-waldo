@@ -74,11 +74,19 @@ const RecordPopup = (props) => {
         console.log(timestampEnd);
 
     }
+
+    const changeStates = (e) => {
+        e.preventDefault();
+        props.setSearchEndFalse();
+        props.assignTimestampEndLoadedFalse();
+        props.assignLeaderboardActive(true);
+
+    }
  
     return (
         <div>
             <div className="form-popup" id="record">
-                <form onSubmit={saveScore} className="form-container">
+                <form onSubmit={(e) => { saveScore(e); changeStates(e); }} className="form-container">
                     <ScoreTime />
 
                     <label htmlFor="name"><b>Enter name to save score</b></label>
